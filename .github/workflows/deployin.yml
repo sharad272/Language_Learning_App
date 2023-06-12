@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -21,12 +21,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Build application
+      - name: Build the application
         run: |
-          # Any build commands or scripts needed to prepare your Flask application
+          # Replace "main.py" with your main Python file name
+          python main.py build
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.0
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: app  # Change this to the folder containing your Flask application
+          github_token: ${{ secrets.TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./public
