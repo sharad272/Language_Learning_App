@@ -1,7 +1,8 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+import os
 
-API_KEY = 'AIzaSyAoBuBNakBj6_NS1jK0edbV8NERmNpYtp0'
+API_KEY = os.environ.get('API_KEY')
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 async def get_channel_id(channel_name):
