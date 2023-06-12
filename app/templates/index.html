@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Learning App</title>
+    <style>
+        body {
+            background-color: #000033;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        li {
+            margin: 20px 0;
+        }
+
+        li a {
+            text-decoration: none;
+            color: white;
+            padding: 10px;
+            background-color: #660066;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center; /* Align vertically */
+            justify-content: center; /* Align horizontally */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translate(0, 0);
+            font-weight: bold;
+            font-size: 18px;
+            margin: 0 auto; /* Center the buttons horizontally */
+            width: 150px; /* Set a fixed width for the buttons */
+        }
+
+        li a:hover {
+            background-color: #990099;
+            transform: translate(0, -5px);
+        }
+
+        li a img {
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 20px; /* Adjust the width as needed */
+            height: 20px; /* Adjust the height as needed */
+            margin-right: 5px; /* Add some margin to the right */
+        }
+    </style>
+</head>
+<body>
+    <h1>Language Learning App</h1>
+    <ul>
+        <li>
+            <a href="/german">
+                <img src="../static/images/germany_flag.png" alt="Germany Flag">
+                <span style="font-weight: bold; font-size: 20px;">German</span>
+            </a>
+        </li>
+        <li>
+            <a href="/french">
+                <img src="../static/images/france_flag.png" alt="France Flag">
+                <span style="font-weight: bold; font-size: 20px;">French</span>
+            </a>
+        </li>
+        <!-- Add more language blocks as needed -->
+    </ul>
+</body>
+</html>

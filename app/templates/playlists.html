@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playlist Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .playlist-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .playlist-description {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .video-card {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #111;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover {
+            background-color: #222;
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .video-player {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+        }
+        
+        .video-player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .active {
+            border: 2px solid #fff;
+        }
+    </style>
+    <script>
+        function playVideo(videoCard) {
+            const videoPlayer = videoCard.querySelector('.video-player');
+            const iframe = videoPlayer.querySelector('iframe');
+
+            // Pause all other videos
+            const videoCards = document.querySelectorAll('.video-card');
+            videoCards.forEach(card => {
+                if (card !== videoCard) {
+                    const cardPlayer = card.querySelector('.video-player');
+                    const cardIframe = cardPlayer.querySelector('iframe');
+                    cardIframe.contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+                }
+            });
+
+            // Play the selected video
+            iframe.contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
+
+            // Scroll to the selected video
+            const offset = videoCard.offsetTop;
+            window.scrollTo({
+                top: offset,
+                behavior: 'smooth'
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const videoCards = document.querySelectorAll('.video-card');
+
+            videoCards.forEach(card => {
+                const videoPlayer = card.querySelector('.video-player');
+                const iframe = videoPlayer.querySelector('iframe');
+
+                iframe.addEventListener('load', () => {
+                    iframe.contentWindow.postMessage('{"event":"command","func":"' + 'addEventListener' + '","args":["onStateChange", "onPlayerStateChange"]}', '*');
+                });
+            });
+        });
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                const videoCard = event.target.closest('.video-card');
+                videoCards.forEach(card => {
+                    if (card === videoCard) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        {% for playlist in playlists %}
+            <h3 class="playlist-title">{{ playlist['title'] }}</h3>
+            <p class="playlist-description">{{ playlist['description'] }}</p>
+            {% for video in playlist['playlist_videos'] %}
+                <div class="video-card" onclick="playVideo(this)">
+                    <h4 class="video-title">{{ video['title'] }}</h4>
+                    <div class="video-player">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video['video_id'] }}?modestbranding=1" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</body>
+</html>
